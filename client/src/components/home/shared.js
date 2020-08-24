@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Card,Button} from "react-bootstrap"
-import {fetch} from './ConnectServer'
+import {getAllImages} from './ConnectServer'
 
 class Shared extends Component {
 
@@ -15,7 +15,7 @@ class Shared extends Component {
     if(!localStorage.usertoken)
       this.props.history.push(`/`)
     console.log(this.props.location.pathname)
-    fetch().then(res=>{
+    getAllImages().then(res=>{
       this.setState({photos : res})
       console.log(res)
     }) 

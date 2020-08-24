@@ -7,12 +7,12 @@ export const upload = details => {
   let axiosConfig = {
     headers: {
         'Content-Type': 'application/json',
-        'Authorization':  localStorage.usertoken
+        'AUTHORIZATION':  localStorage.usertoken
     }
   }
 
   return axios
-    .post('/image/upload', postData, axiosConfig)
+    .post('http://localhost:8080/api/v1/images/', postData, axiosConfig)
       .then(response => {
         return response.data
       })
@@ -28,7 +28,7 @@ export const share = details => {
   let axiosConfig = {
     headers: {
         'Content-Type': 'application/json',
-        'Authorization':  localStorage.usertoken
+        'AUTHORIZATION':  localStorage.usertoken
     }
   }
 
@@ -43,22 +43,54 @@ export const share = details => {
 } 
 
 
-export const fetch = () => {
+export const getAllImages = () => {
 
 
   let axiosConfig = {
     headers: {
         'Content-Type': 'application/json',
-        'Authorization':  localStorage.usertoken
+        'AUTHORIZATION':  localStorage.usertoken
     }
   }
 
   return axios
-    .get('/image/fetch',  axiosConfig)
+    .get('http://localhost:8080/api/v1/images/',  axiosConfig)
       .then(response => {
-        return response.data
+        return response.data.image_ids
       })
       .catch(err => {
         console.log(err)
       })
 } 
+
+export const getImage = (image_id) => {
+  let axiosConfig = {
+    headers: {
+        'Content-Type': 'application/json',
+        'AUTHORIZATION':  localStorage.usertoken
+    }
+  }
+  return axios
+    .get('http://localhost:8080/api/v1/images/'+String(image_id)+'/', axiosConfig)
+      .then(response => {
+        return response.data
+      }).catch(err =>{
+        console.log(err)
+      })
+}
+
+export const getAllTags = () => {
+  let axiosConfig = {
+    headers:{
+      'Content-Type':'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+  return axios
+    .get('http://localhost:8080/api/v1/tags', axiosConfig)
+      .then(response => {
+        return response.data
+      }).catch(err =>{
+        console.log(err)
+        })
+}

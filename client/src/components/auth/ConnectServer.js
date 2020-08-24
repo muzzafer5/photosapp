@@ -3,8 +3,10 @@ import axios from 'axios'
 export const signup = newUser => {
   var postData = newUser
   return axios
-    .post('/auth/signup', postData)
+    .post('http://localhost:8080/api/v1/accounts/signup/', postData)
       .then(response => {
+        console.log(response)
+        alert(response.data)
         return response.data
       })
       .catch(err => {
@@ -16,7 +18,7 @@ export const signup = newUser => {
 export const login = user => {
   var postData = user
   return axios
-    .post('/auth/login', postData)
+    .post('http://localhost:8080/api/v1/accounts/login/', postData)
       .then(response => {
         return response.data
       })
@@ -25,3 +27,15 @@ export const login = user => {
         alert("Invalid username or password")
       })
 }
+
+// export const logout = () =>{
+//   return axios.post('http://localhost:8080/api/v1/accounts/logout/',{})
+//   .then(
+//     response => {
+//       return response.status
+//     }
+//   ).catch(err =>{
+//     console.log(err)
+//     alert('Not able to logout')
+//   })
+// }

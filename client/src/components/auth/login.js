@@ -27,7 +27,7 @@ class Login extends Component {
 
     login(user).then(res => {
       if (res) {
-        localStorage.setItem('usertoken', res)
+        localStorage.setItem('usertoken', res.token)
         this.props.history.push('/home')
       }  
     })
@@ -43,8 +43,7 @@ class Login extends Component {
           width: "35%", 
           left : "30%", 
           borderRadius : "20px"
-        }}
-      >
+        }}>
             <form validate="true" onSubmit={this.onSubmit}>
               <h1 className="h2 text-center py-2" style = {{borderBottom : "1px solid grey"}}>Login</h1>
               <div className="form-group my-3 mx-3">

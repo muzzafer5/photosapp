@@ -40,8 +40,7 @@ class Signup extends Component {
             width: "35%", 
             left : "30%", 
             borderRadius : "20px"
-          }}
-      >
+          }}>
             <form validate="true" onSubmit={this.onSubmit}>
               <h1 className="h2 text-center py-2" style = {{borderBottom : "1px solid grey"}}>Signup</h1>
               <div className="form-group my-3 mx-3">
