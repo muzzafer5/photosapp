@@ -67,13 +67,9 @@ class MyPhotos extends Component {
         var users_ids = this.state.users_ids.split(' ')
         var details = {
             image_id: images[this.state.currentImage].id,
-            users_ids: users_ids
+            user_ids: users_ids
         }
-        shareImage(details).then(res => {
-            alert(`Image ${this.state.currentImage} is started sharing`)
-        }).catch(err => {
-            alert(`Invalid array of user id`)
-        })
+        shareImage(details).then(res => { })
         this.setState({ users_ids: '' })
     }
 
@@ -85,13 +81,10 @@ class MyPhotos extends Component {
             images: [image_id]
         }
         console.log(details)
-        addToAlbum(details).then(res => {
-            alert(`Image ${this.state.currentImage} is added in album`)
-        }).catch(err => {
-            alert(`Invalid album name`)
-        })
+        addToAlbum(details).then(res => { })
         this.setState({ album_name: '' })
     }
+
     render() {
         return (
             <div className="my-3">

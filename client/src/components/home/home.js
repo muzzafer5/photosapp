@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Button, Modal, OverlayTrigger, Popover} from "react-bootstrap"
-import {getAllImages, getImage, deleteImage, shareImage, addToAlbum} from './ConnectServer'
+import {getAllImages, getImage, deleteImage, shareImage, addToAlbum,getTag} from './ConnectServer'
 import Gallery from 'react-grid-gallery';
 
 class Home extends Component {
@@ -27,15 +27,24 @@ class Home extends Component {
       if(res){
         res.image_ids.map(id => {
           getImage(id).then(res=>{
-            var img_detail = {
-              src : res.uri,
-              thumbnail : res.uri,
-              id : res.id
+            if(res){
+              var ar=[1,2]
+              var img_detail = {
+                src : res.uri,
+                thumbnail : res.uri,
+                id : res.id,
+                caption : res.place,
+                tags: res.tags.map(data=>{
+                  getTag(data).then(res => {
+                    return { value: res.name }
+                  })
+                })
+              }
+              console.log(res)
+              this.setState({
+                images: [...this.state.images, img_detail]
+              })
             }
-            console.log(res)
-            this.setState({
-              images: [...this.state.images, img_detail]
-            })
           })
         })
       }
@@ -67,13 +76,9 @@ class Home extends Component {
     var users_ids = this.state.users_ids.split(' ')
     var details ={
       image_id: images[this.state.currentImage].id,
-      users_ids : users_ids
+      user_ids : users_ids
     }
-    shareImage(details).then(res => {
-      alert(`Image ${this.state.currentImage} is started sharing`)
-    }).catch(err=>{
-      alert(`Invalid array of user id`)
-    })
+    shareImage(details).then(res => {})
     this.setState({users_ids : ''})  
   }
   
@@ -85,11 +90,7 @@ class Home extends Component {
       images: [image_id]
     }
     console.log(details)
-    addToAlbum(details).then(res => {
-      alert(`Image ${this.state.currentImage} is added in album`)
-    }).catch(err => {
-      alert(`Invalid album name`)
-    })
+    addToAlbum(details).then(res => {})
     this.setState({ album_name: '' })  
   }
   render() {
