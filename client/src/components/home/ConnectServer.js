@@ -45,6 +45,26 @@ export const shareImage = details => {
       })
 } 
 
+export const addToAlbum = details => {
+
+
+  let axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+
+  return axios
+    .post('/api/v1/albums/', details, axiosConfig)
+    .then(response => {
+      console.log(response.data)
+      return response.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
+} 
 
 export const getAllImages = () => {
 
@@ -64,6 +84,27 @@ export const getAllImages = () => {
         console.log(err)
       })
 } 
+
+export const getAllAlbums = () => {
+
+  let axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+
+  return axios
+    .get('/api/v1/albums/', axiosConfig)
+    .then(response => {
+      return response.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
+} 
+
+
 export const getAllSharedImages = () => {
 
   let axiosConfig = {
@@ -115,6 +156,22 @@ export const getImage = (image_id) => {
       }).catch(err =>{
         console.log(err)
       })
+}
+
+export const getAlbum = (album_id) => {
+  let axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+  return axios
+    .get('/api/v1/albums/' + String(album_id) + '/', axiosConfig)
+    .then(response => {
+      return response.data
+    }).catch(err => {
+      console.log(err)
+    })
 }
 
 export const deleteImage = (image_id) => {

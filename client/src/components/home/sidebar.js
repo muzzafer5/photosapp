@@ -10,7 +10,6 @@ constructor(props){
   }
 
   ChnageBgColorWhite(e){
-      console.log(e.target.style.backgroundColor)
     if(e.target.style.backgroundColor == "rgb(242, 242, 242)"){
         e.target.style.backgroundColor = "white"
     }
@@ -76,7 +75,7 @@ constructor(props){
             <div>
             <Button variant="outline-light" onMouseEnter = {(e)=>this.ChnageBgColorGrey(e)} onMouseLeave = {(e)=>this.ChnageBgColorWhite(e)}
                 style = {{
-                    backgroundColor :this.state.path == '/album' ? "#effce8": "white",
+                    backgroundColor: this.state.path.startsWith('/album') ? "#effce8": "white",
                     color : "black",
                     width : "90%",
                     margin : "5px 0px",

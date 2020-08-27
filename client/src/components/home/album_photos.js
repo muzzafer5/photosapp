@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { Card, Button, Modal } from "react-bootstrap"
-import { getAllPrivateImages, getImage, deleteImage, shareImage,addToAlbum } from './ConnectServer'
+import { Card, Button } from "react-bootstrap"
+import { getAlbum, getImage, deleteImage, shareImage, addToAlbum } from './ConnectServer'
 import Gallery from 'react-grid-gallery';
 
-class MyPhotos extends Component {
-
-    constructor() {
-        super()
+class AlbumPhotos extends Component {
+    constructor(props) {
+        super(props)
         this.state = {
             images: [],
             users_ids: '',
+            album_id: this.props.match.params.albumId,
             album_name: '',
             currentImage: 0
         }
@@ -23,9 +23,9 @@ class MyPhotos extends Component {
     componentDidMount() {
         if (!localStorage.usertoken)
             this.props.history.push(`/`)
-        getAllPrivateImages().then(res => {
+        getAlbum(this.state.album_id).then(res => {
             if (res) {
-                res.image_ids.map(id => {
+                res.images.map(id => {
                     getImage(id).then(res => {
                         var img_detail = {
                             src: res.uri,
@@ -103,7 +103,7 @@ class MyPhotos extends Component {
                     customControls={[
                         <Button variant="dark" className="mr-3" key="deleteImage" onClick={this.onDeleteImage}>
                             Delete
-            </Button>,
+                        </Button>,
                         <input
                             type="text"
                             className="form-control"
@@ -115,7 +115,7 @@ class MyPhotos extends Component {
                         />,
                         <Button variant="dark" className="px-3 mr-3 mx-1" key="shareImage" onClick={this.onShareImage}>
                             Share
-            </Button>,
+                        </Button>,
                         <input
                             type="text"
                             className="form-control"
@@ -127,7 +127,7 @@ class MyPhotos extends Component {
                         />,
                         <Button variant="dark" className=" ml-1" key="addInAlbum" onClick={this.onAddAlbum}>
                             Add@Album
-            </Button>
+                        </Button>
                     ]}
                 />
 
@@ -137,5 +137,4 @@ class MyPhotos extends Component {
 }
 
 
-
-export default MyPhotos
+export default AlbumPhotos

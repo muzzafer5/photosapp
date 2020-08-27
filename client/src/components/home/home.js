@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Button, Modal, OverlayTrigger, Popover} from "react-bootstrap"
-import {getAllImages, getImage, deleteImage, shareImage} from './ConnectServer'
+import {getAllImages, getImage, deleteImage, shareImage, addToAlbum} from './ConnectServer'
 import Gallery from 'react-grid-gallery';
 
 class Home extends Component {
@@ -10,12 +10,14 @@ class Home extends Component {
     this.state = {
       images : [],
       users_ids : '',
+      album_name : '',
       currentImage: 0
     }
     this.onChange = this.onChange.bind(this)
     this.onCurrentImageChange = this.onCurrentImageChange.bind(this)
     this.onDeleteImage = this.onDeleteImage.bind(this)
     this.onShareImage = this.onShareImage.bind(this)
+    this.onAddAlbum = this.onAddAlbum.bind(this)
   }
 
   componentDidMount() {
@@ -71,54 +73,61 @@ class Home extends Component {
       alert(`Image ${this.state.currentImage} is started sharing`)
     }).catch(err=>{
       alert(`Invalid array of user id`)
-    })  
+    })
+    this.setState({users_ids : ''})  
   }
   
+  onAddAlbum(){
+    var images = this.state.images.slice();
+    var image_id = images[this.state.currentImage].id;
+    var details = {
+      name: this.state.album_name,
+      images: [image_id]
+    }
+    console.log(details)
+    addToAlbum(details).then(res => {
+      alert(`Image ${this.state.currentImage} is added in album`)
+    }).catch(err => {
+      alert(`Invalid album name`)
+    })
+    this.setState({ album_name: '' })  
+  }
   render() {
     return (  
         <div className = "my-3">
         <Gallery
-          style={{ zIndex: '3' }}
           images={this.state.images}
           enableLightbox={true}
           enableImageSelection={false}
           currentImageWillChange={this.onCurrentImageChange}
           customControls={[
-            <Button variant="dark" className="mr-5"  key="deleteImage" onClick={this.onDeleteImage}>
+            <Button variant="dark" className="mr-3"  key="deleteImage" onClick={this.onDeleteImage}>
               Delete
             </Button>,
             <input
               type="text"
               className="form-control"
-              style={{maxWidth: '50%'}}
               name="users_ids"
-              placeholder="id1 id2 ..."
+              placeholder="Enter users ids to share [id1 id2 ...]"
               required
               value={this.state.users_ids}
               onChange={this.onChange}
             />,
-            <Button variant="dark" className = "px-5" key="shareImage" onClick={this.onShareImage}>
+            <Button variant="dark" className = "px-3 mr-3 mx-1" key="shareImage" onClick={this.onShareImage}>
               Share
             </Button>,
-            <Button variant="dark" className="ml-5" key="addInAlbum" onClick={this.toggleShareModal}>
-              Add to album
-            </Button>,
-            <OverlayTrigger
-              style={{ zIndex: '100' }}
-              trigger="click"
-              key="bottom"
-              placement="right"
-              overlay={
-                <Popover id="overlay-bottom">
-                  <Popover.Title as="h3">click</Popover.Title>
-                  <Popover.Content>
-                    <strong>Holy guacamole!</strong> Check this info.
-            </Popover.Content>
-                </Popover>
-              }
-            >
-              <Button variant="secondary">Popover</Button>
-            </OverlayTrigger>
+            <input
+              type="text"
+              className="form-control"
+              name="album_name"
+              placeholder="Enter album name"
+              required
+              value={this.state.album_name}
+              onChange={this.onChange}
+            />,
+            <Button variant="dark" className=" ml-1" key="addInAlbum" onClick={this.onAddAlbum}>
+              Add@Album
+            </Button>
           ]}
         />
 

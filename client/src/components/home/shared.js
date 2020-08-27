@@ -1,33 +1,30 @@
 import React, { Component } from 'react'
 import { Card, Button, Modal } from "react-bootstrap"
-import { getAllSharedImages, getImage, deleteImage } from './ConnectServer'
+import { getAllSharedImages, getImage, deleteImage,addToAlbum, shareImage } from './ConnectServer'
 import Gallery from 'react-grid-gallery';
 
-class Home extends Component {
+class Shared extends Component {
 
   constructor() {
     super()
     this.state = {
       images: [],
-      photos_ids: [],
-      show: false,
-      username: '',
-      filename: '',
+      users_ids: '',
+      album_name: '',
       currentImage: 0
     }
     this.onChange = this.onChange.bind(this)
-    this.onCurrentImageChange = this.onCurrentImageChange.bind(this);
-    this.onDeleteImage = this.onDeleteImage.bind(this);
+    this.onCurrentImageChange = this.onCurrentImageChange.bind(this)
+    this.onDeleteImage = this.onDeleteImage.bind(this)
+    this.onShareImage = this.onShareImage.bind(this)
+    this.onAddAlbum = this.onAddAlbum.bind(this)
   }
-
-
 
   componentDidMount() {
     if (!localStorage.usertoken)
       this.props.history.push(`/`)
     getAllSharedImages().then(res => {
       if (res) {
-        this.setState({ photos_ids: res.image_ids })
         res.image_ids.map(id => {
           getImage(id).then(res => {
             var img_detail = {
@@ -65,10 +62,36 @@ class Home extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  shareImage() {
-    console.log(this.state.username, this.state.filename)
+  onShareImage() {
+    var images = this.state.images.slice();
+    var users_ids = this.state.users_ids.split(' ')
+    var details = {
+      image_id: images[this.state.currentImage].id,
+      users_ids: users_ids
+    }
+    shareImage(details).then(res => {
+      alert(`Image ${this.state.currentImage} is started sharing`)
+    }).catch(err => {
+      alert(`Invalid array of user id`)
+    })
+    this.setState({ users_ids: '' })
   }
 
+  onAddAlbum() {
+    var images = this.state.images.slice();
+    var image_id = images[this.state.currentImage].id;
+    var details = {
+      name: this.state.album_name,
+      images: [image_id]
+    }
+    console.log(details)
+    addToAlbum(details).then(res => {
+      alert(`Image ${this.state.currentImage} is added in album`)
+    }).catch(err => {
+      alert(`Invalid album name`)
+    })
+    this.setState({ album_name: '' })
+  }
   render() {
     return (
       <div className="my-3">
@@ -77,15 +100,41 @@ class Home extends Component {
           enableLightbox={true}
           enableImageSelection={false}
           currentImageWillChange={this.onCurrentImageChange}
-
           customControls={[
-            <button key="deleteImage" onClick={this.onDeleteImage}>Delete</button>
+            <Button variant="dark" className="mr-3" key="deleteImage" onClick={this.onDeleteImage}>
+              Delete
+            </Button>,
+            <input
+              type="text"
+              className="form-control"
+              name="users_ids"
+              placeholder="Enter users ids to share [id1 id2 ...]"
+              required
+              value={this.state.users_ids}
+              onChange={this.onChange}
+            />,
+            <Button variant="dark" className="px-3 mr-3 mx-1" key="shareImage" onClick={this.onShareImage}>
+              Share
+            </Button>,
+            <input
+              type="text"
+              className="form-control"
+              name="album_name"
+              placeholder="Enter album name"
+              required
+              value={this.state.album_name}
+              onChange={this.onChange}
+            />,
+            <Button variant="dark" className=" ml-1" key="addInAlbum" onClick={this.onAddAlbum}>
+              Add@Album
+            </Button>
           ]}
         />
+
       </div>
     )
   }
 }
 
 
-export default Home
+export default Shared

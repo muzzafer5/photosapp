@@ -1,44 +1,59 @@
 import React, { Component } from 'react'
 import {Card,Button} from "react-bootstrap"
-import {getAllImages} from './ConnectServer'
+import {getAllAlbums, getAlbum} from './ConnectServer'
 
 class Album extends Component {
 
   constructor(){
     super()
     this.state = {
-      photos : []
+      albums : []
     }
   }
 
   componentDidMount() {
     if(!localStorage.usertoken)
       this.props.history.push(`/`)
-    console.log(this.props.location.pathname)
-    getAllImages().then(res=>{
-      this.setState({photos : res})
-      console.log(res)
-    }) 
+    getAllAlbums().then(res => {
+      if (res) {
+        res.album_ids.map(id => {
+          getAlbum(id).then(res => {
+            this.setState({
+              albums: [...this.state.albums, res]
+            })
+          })
+        })
+      }
+    })
   }
 
+  onEnterAlbum(albumId) {
+    const albumURL = '/album/' + albumId
+    this.props.history.push(albumURL)
+  }
   
   render() {
 
     return (  
         <div >
-          {
-            this.state.photos?
-              (
-                this.state.photos.map((data,index) =>(
-                  <span key = {index}
-                    style = {{
-                      margin : "1px"
-                    }}
-                  >
-                  </span>
+          <div className="row">
+            {
+              this.state.albums ? (
+                this.state.albums.map(data => (
+                  <Card className="mr-3" key={data.id} style={{ width: '16rem' }}>
+                    <Card.Body>
+                      <Card.Title >{data.name}</Card.Title>
+                      <Card.Text>
+                        Images : {data.images.length}<br/>
+                        Shared with : {data.shared_with.length}
+                      </Card.Text>
+                      <Button variant="dark" onClick={() => this.onEnterAlbum(data.id)}>Enter</Button>
+                    </Card.Body>
+                  </Card>
                 ))
-              ):''
-          }
+              ) : ''
+            }
+          </div>
         </div>
         
     )
