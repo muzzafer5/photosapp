@@ -46,6 +46,20 @@ constructor(props){
                 </Button>
             </div>
             <div>
+                <Button variant="outline-light" onMouseEnter={(e) => this.ChnageBgColorGrey(e)} onMouseLeave={(e) => this.ChnageBgColorWhite(e)}
+                    style={{
+                        backgroundColor: this.state.path == '/myphotos' ? "#effce8" : "white",
+                        color: "black",
+                        width: "90%",
+                        margin: "5px 0px",
+                        borderRadius: "0px 20px 20px 0px"
+                    }}
+                    onClick={() => this.props.history.push('/myphotos')}
+                >
+                    Private
+                </Button>
+            </div>
+            <div>
                 <Button variant="outline-light" onMouseEnter = {(e)=>this.ChnageBgColorGrey(e)} onMouseLeave = {(e)=>this.ChnageBgColorWhite(e)}
                     style = {{
                         backgroundColor :this.state.path == '/shared' ? "#effce8": "white",

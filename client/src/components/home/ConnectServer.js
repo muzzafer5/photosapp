@@ -33,7 +33,6 @@ export const shareImage = details => {
         'AUTHORIZATION':  localStorage.usertoken
     }
   }
-  console.log(details)
 
   return axios
     .post('/api/v1/images/' + String(details.image_id) + '/share/',postData, axiosConfig)
@@ -76,6 +75,24 @@ export const getAllSharedImages = () => {
 
   return axios
     .get('/api/v1/images/shared/', axiosConfig)
+    .then(response => {
+      return response.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+export const getAllPrivateImages = () => {
+
+  let axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+
+  return axios
+    .get('/api/v1/images/private/', axiosConfig)
     .then(response => {
       return response.data
     })

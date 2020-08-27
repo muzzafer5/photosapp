@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card, Button, Modal} from "react-bootstrap"
+import { Card, Button, Modal, OverlayTrigger, Popover} from "react-bootstrap"
 import {getAllImages, getImage, deleteImage, shareImage} from './ConnectServer'
 import Gallery from 'react-grid-gallery';
 
@@ -67,13 +67,18 @@ class Home extends Component {
       image_id: images[this.state.currentImage].id,
       users_ids : users_ids
     }
-    shareImage(details).then(res => {})  
+    shareImage(details).then(res => {
+      alert(`Image ${this.state.currentImage} is started sharing`)
+    }).catch(err=>{
+      alert(`Invalid array of user id`)
+    })  
   }
   
   render() {
     return (  
         <div className = "my-3">
         <Gallery
+          style={{ zIndex: '3' }}
           images={this.state.images}
           enableLightbox={true}
           enableImageSelection={false}
@@ -98,8 +103,25 @@ class Home extends Component {
             <Button variant="dark" className="ml-5" key="addInAlbum" onClick={this.toggleShareModal}>
               Add to album
             </Button>,
+            <OverlayTrigger
+              style={{ zIndex: '100' }}
+              trigger="click"
+              key="bottom"
+              placement="right"
+              overlay={
+                <Popover id="overlay-bottom">
+                  <Popover.Title as="h3">click</Popover.Title>
+                  <Popover.Content>
+                    <strong>Holy guacamole!</strong> Check this info.
+            </Popover.Content>
+                </Popover>
+              }
+            >
+              <Button variant="secondary">Popover</Button>
+            </OverlayTrigger>
           ]}
         />
+
         </div>       
     )
   }

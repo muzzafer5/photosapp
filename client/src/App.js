@@ -9,6 +9,7 @@ import Login from './components/auth/login'
 import Signup from './components/auth/signup'
 import Album from './components/home/album'
 import Shared from './components/home/shared'
+import MyPhotos from './components/home/private'
 
 class App extends PureComponent {
   render () {
@@ -21,6 +22,7 @@ class App extends PureComponent {
           <ProtectedRoute exact path="/home" component={Home} />
           <ProtectedRoute exact path="/shared" component={Shared} />
           <ProtectedRoute exact path="/album" component={Album} />
+          <ProtectedRoute exact path="/myphotos" component={MyPhotos} />
         </div>
       </Router>
     )
