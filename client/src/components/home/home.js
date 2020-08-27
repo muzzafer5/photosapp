@@ -9,18 +9,14 @@ class Home extends Component {
     super()
     this.state = {
       images : [],
-      show_share_modal : false,
-      user_id : '',
+      users_ids : '',
       currentImage: 0
     }
     this.onChange = this.onChange.bind(this)
     this.onCurrentImageChange = this.onCurrentImageChange.bind(this)
     this.onDeleteImage = this.onDeleteImage.bind(this)
-    this.toggleShareModal = this.toggleShareModal.bind(this)
     this.onShareImage = this.onShareImage.bind(this)
   }
-
-
 
   componentDidMount() {
     if (!localStorage.usertoken)
@@ -64,52 +60,17 @@ class Home extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  toggleShareModal(){
-    this.setState({show_share_modal : !this.state.show_share_modal})
-  }
-
   onShareImage(){
     var images = this.state.images.slice();
+    var users_ids = this.state.users_ids.split(' ')
     var details ={
       image_id: images[this.state.currentImage].id,
-      user_id : this.state.user_id
+      users_ids : users_ids
     }
-    shareImage(details).then(res => {
-      images.splice(this.state.currentImage, 1)
-      this.setState({
-        images: images
-      });
-    })  
-    this.setState({ show_share_modal: false })
+    shareImage(details).then(res => {})  
   }
   
   render() {
-    const modal = (
-      <Modal centered show={this.state.show_share_modal} animation={false} styel = {{zIndex : 100}}>
-        <Modal.Header closeButton onClick={this.toggleShareModal}>
-          <Modal.Title>Share</Modal.Title>
-        </Modal.Header>
-        <Modal.Body >
-          <div className="form-group my-3 mx-3">
-            <label htmlFor="image_name">User ID</label>
-            <input
-              type="text"
-              className="form-control"
-              name="user_id"
-              required
-              placeholder="Enter the user id"
-              value={this.state.user_id}
-              onChange={this.onChange}
-            />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="dark" className="btn btn-primary" onClick={this.onShareImage}>
-            Share
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
     return (  
         <div className = "my-3">
         <Gallery
@@ -117,14 +78,28 @@ class Home extends Component {
           enableLightbox={true}
           enableImageSelection={false}
           currentImageWillChange={this.onCurrentImageChange}
-
           customControls={[
-            <Button variant="dark"  key="deleteImage" onClick={this.onDeleteImage}>Delete</Button>,
-            <Button variant="dark" key="shareImage" onClick={this.toggleShareModal}>Share</Button>,
-            <Button variant="dark" key="addInAlbum" onClick={this.toggleShareModal}>Add to album</Button>
+            <Button variant="dark" className="mr-5"  key="deleteImage" onClick={this.onDeleteImage}>
+              Delete
+            </Button>,
+            <input
+              type="text"
+              className="form-control"
+              style={{maxWidth: '50%'}}
+              name="users_ids"
+              placeholder="id1 id2 ..."
+              required
+              value={this.state.users_ids}
+              onChange={this.onChange}
+            />,
+            <Button variant="dark" className = "px-5" key="shareImage" onClick={this.onShareImage}>
+              Share
+            </Button>,
+            <Button variant="dark" className="ml-5" key="addInAlbum" onClick={this.toggleShareModal}>
+              Add to album
+            </Button>,
           ]}
         />
-        {modal}
         </div>       
     )
   }
