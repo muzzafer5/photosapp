@@ -35,7 +35,6 @@ class Album extends Component {
                       margin : "1px"
                     }}
                   >
-                    <img height = "150px"src = {require('../../../public/uploads/'+data.image.filename)} alt = "pic" />
                   </span>
                 ))
               ):''

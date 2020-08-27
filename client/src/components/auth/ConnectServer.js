@@ -3,10 +3,8 @@ import axios from 'axios'
 export const signup = newUser => {
   var postData = newUser
   return axios
-    .post('http://localhost:8080/api/v1/accounts/signup/', postData)
+    .post('/api/v1/accounts/signup/', postData)
       .then(response => {
-        console.log(response)
-        alert(response.data)
         return response.data
       })
       .catch(err => {
@@ -18,7 +16,7 @@ export const signup = newUser => {
 export const login = user => {
   var postData = user
   return axios
-    .post('http://localhost:8080/api/v1/accounts/login/', postData)
+    .post('/api/v1/accounts/login/', postData)
       .then(response => {
         return response.data
       })
@@ -28,14 +26,19 @@ export const login = user => {
       })
 }
 
-// export const logout = () =>{
-//   return axios.post('http://localhost:8080/api/v1/accounts/logout/',{})
-//   .then(
-//     response => {
-//       return response.status
-//     }
-//   ).catch(err =>{
-//     console.log(err)
-//     alert('Not able to logout')
-//   })
-// }
+export const call_logout = () =>{
+  let axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+  return axios
+  .post('/api/v1/accounts/logout/', {}, axiosConfig).then(response => {
+      return response.data
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
+

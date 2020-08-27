@@ -26,21 +26,6 @@ class Shared extends Component {
 
     return (  
         <div >
-          {
-            this.state.photos?
-              (
-                this.state.photos.map((data,index) =>(
-                  <span 
-                    style = {{
-                      margin : "1px"
-                    }}
-                    key = {index}
-                  >
-                    <img height = "150px"src = {require('../../../public/uploads/'+data.image.filename)} alt = "pic" />
-                  </span>
-                ))
-              ):''
-          }
         </div>
         
     )

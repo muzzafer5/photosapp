@@ -12,7 +12,7 @@ export const upload = details => {
   }
 
   return axios
-    .post('http://localhost:8080/api/v1/images/', postData, axiosConfig)
+    .post('/api/v1/images/', postData, axiosConfig)
       .then(response => {
         return response.data
       })
@@ -45,7 +45,6 @@ export const share = details => {
 
 export const getAllImages = () => {
 
-
   let axiosConfig = {
     headers: {
         'Content-Type': 'application/json',
@@ -54,9 +53,9 @@ export const getAllImages = () => {
   }
 
   return axios
-    .get('http://localhost:8080/api/v1/images/',  axiosConfig)
+    .get('/api/v1/images/',  axiosConfig)
       .then(response => {
-        return response.data.image_ids
+        return response.data
       })
       .catch(err => {
         console.log(err)
@@ -71,12 +70,28 @@ export const getImage = (image_id) => {
     }
   }
   return axios
-    .get('http://localhost:8080/api/v1/images/'+String(image_id)+'/', axiosConfig)
+    .get('/api/v1/images/'+String(image_id)+'/', axiosConfig)
       .then(response => {
         return response.data
       }).catch(err =>{
         console.log(err)
       })
+}
+
+export const deleteImage = (image_id) => {
+  let axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+  return axios
+    .delete('/api/v1/images/' + String(image_id) + '/', axiosConfig)
+    .then(response => {
+      return response.data
+    }).catch(err => {
+      console.log(err)
+    })
 }
 
 export const getAllTags = () => {
