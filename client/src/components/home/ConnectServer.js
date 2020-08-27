@@ -21,10 +21,15 @@ export const upload = details => {
       })
 } 
 
-export const share = details => {
+export const shareImage = details => {
 
-  var postData = details
+  var user_ids = []
+  user_ids.push(details.user_id)
 
+  var postData = {
+    user_ids : user_ids
+  }
+  
   let axiosConfig = {
     headers: {
         'Content-Type': 'application/json',
@@ -33,8 +38,9 @@ export const share = details => {
   }
 
   return axios
-    .post('/image/share',postData, axiosConfig)
+    .post('/api/v1/images/' + String(details.image_id) + '/share',postData, axiosConfig)
       .then(response => {
+        console.log(response.data)
         return response.data
       })
       .catch(err => {
@@ -60,6 +66,24 @@ export const getAllImages = () => {
       .catch(err => {
         console.log(err)
       })
+} 
+export const getAllSharedImages = () => {
+
+  let axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'AUTHORIZATION': localStorage.usertoken
+    }
+  }
+
+  return axios
+    .get('/api/v1/images/shared', axiosConfig)
+    .then(response => {
+      return response.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
 } 
 
 export const getImage = (image_id) => {
